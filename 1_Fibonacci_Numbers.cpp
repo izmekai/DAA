@@ -14,7 +14,7 @@ int iStepFibbonacci(int n){
         cnt++;
         f.push_back(f[i - 1] + f[i - 2]);
     }
-    return n;
+    return cnt;
 }
 
 int rSteps = 0;

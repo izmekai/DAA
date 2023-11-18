@@ -1,85 +1,71 @@
 #include<bits/stdc++.h>
 using namespace std;
-
-bool isSafe(int **arr, int x, int y, int n){
-    for(int row=0;row<x;row++){
-        if(arr[row][y]==1){
+int board[8][8]={0};
+bool ispossible(int r,int c){
+    for(int j=0;j<8;j++){
+        if(board[r][j]==1){
             return false;
         }
     }
-
-    int row =x;
-    int col =y;
-    while(row>=0 && col>=0){
-        if(arr[row][col]==1){
+    for(int j=0;j<8;j++){
+        if(board[j][c]==1){
             return false;
         }
-        row--;
-        col--;
     }
-
-    row =x;
-    col =y;
-    while(row>=0 && col<n){
-        if(arr[row][col]==1){
+    for(int i=r,j=c;j>=0 && i>=0;i--,j--){
+        if(board[i][j]==1){
             return false;
         }
-        row--;
-        col++;
     }
-
+    for(int i=r,j=c;j<8 && i<8;i++,j++){
+        if(board[i][j]==1){
+            return false;
+        }
+    }
+    for(int i=r,j=c;j>=0 && i<8;i++,j--){
+        if(board[i][j]==1){
+            return false;
+        }
+    }
+    for(int i=r,j=c;j<8 && i>=0;i--,j++){
+        if(board[i][j]==1){
+            return false;
+        }
+    }
     return true;
 }
-
-void printBoard(int **arr, int n){
-	for(int i=0;i<n;i++){
-        for(int j=0;j<n;j++){
-			if(arr[i][j] == 1) cout << "[Q]";
-			else cout << "[]";
-		}
-        cout << endl;
-	}
-	cout << endl;
-	cout << endl;
-}
-
-
-void nQueen(int** arr, int x, int n){
-    if(x == n){
-        printBoard(arr, n);
-		return;
+void print(){
+    for(int i=0;i<8;i++){
+        for(int j=0;j<8;j++){
+            cout<<board[i][j]<<" ";
+        }
+        cout<<"\n";
     }
-
-    for(int col=0;col<n;col++){
-        if(isSafe(arr,x,col,n)){
-            arr[x][col]=1;
-            nQueen(arr,x+1,n);
-            arr[x][col]=0;
+}
+void fx(int r){
+    if(r==8){
+        print();
+        cout<<"\n";
+        return ;
+    }
+    for(int i=0;i<8;i++){
+        if(board[r][i]==1){
+            fx(r+1);
+        }
+        else if(ispossible(r,i)==true){
+            board[r][i]=1;
+            fx(r+1);
+            board[r][i]=0;
         }
     }
+    return ;
 }
-
-
 int main(){
-    int n;
-    n=8;
-    
-    int **arr = new int*[n];    
-    for(int i=0;i<n;i++){
-        arr[i] = new int[n];
-        for(int j=0;j<n;j++){
-            arr[i][j]=0;
-        }
-    }
-	
-	nQueen(arr, 0, n);
-	
-	cout << "--------All possible solutions--------";
-	
-    return 0;
+    print();
+    int r=0;
+    int c=0;
+    cout<<"\n"<<"Give Row and Column with space: ";
+    cin>>r>>c;
+    board[r][c]=1;
+    fx(0);
 }
-
-/*
-Time Complexity: O(N!)
-Auxiliary Space: O(N^2)
-*/
